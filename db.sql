@@ -17,8 +17,16 @@ CREATE TABLE comments(
 commentID integer primary key autoincrement not null,
 commentMsg text not null,
 commentTime text not null,
-userID not null,
-bulletID not null,
+userID text not null,
+bulletID integer not null,
+foreign key(userID) references students(userID),
+foreign key(bulletID) references bulletins(bulletID)
+);
+CREATE TABLE favors(
+favorID integer primary key autoincrement not null,
+favorTime text not null,
+userID text not null,
+bulletID integer not null,
 foreign key(userID) references students(userID),
 foreign key(bulletID) references bulletins(bulletID)
 );

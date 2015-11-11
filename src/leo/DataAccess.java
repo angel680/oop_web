@@ -2,7 +2,6 @@ package leo;
 
 import java.sql.*;
 import java.util.ArrayList;
-
 import leo.datas.*;
 
 public class DataAccess {
@@ -31,6 +30,16 @@ public class DataAccess {
 		
 		}
 		return m_connet;
+	}
+	
+	public static void terminate(){
+		try {
+			m_statement.close();
+			m_connet.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static Student findStudent(String userID){
@@ -81,6 +90,7 @@ public class DataAccess {
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: findBulletin SQL EXECUTE FAIL"
 					+ "\n\t" + e.getSQLState());
+			System.out.println(sql);
 		}
 		
 		return m_bulletin;
@@ -161,18 +171,19 @@ public class DataAccess {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("LEO LOG: findCommentsByUser SQL EXECUTE FAIL");
+			System.out.println("LEO LOG: findCommentsByUser SQL EXECUTE FAIL \n\t+"
+					+ e.getSQLState());
 		}	
 		return returnArray;
 	}
 	
-	public static ArrayList<Bulletin> findBulletinByUser(String userID){
+	public static ArrayList<Bulletin> findBulletinsByUser(String userID){
 		ArrayList<Bulletin> returnArray = new ArrayList<Bulletin>();
 		Bulletin m_Bulletin;
 		
 		String sql = "SELECT bulletID, bulletMsg, "
 				+ "bulletTime FROM bulletins "
-				+ "WHRER userID = '" + userID + "'";
+				+ "WHERE userID = '" + userID + "'";
 		
 		try {
 			ResultSet result = m_statement.executeQuery(sql);
@@ -186,13 +197,15 @@ public class DataAccess {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("LEO LOG: findBulletinByUser SQL EXECUTE FAIL");
+			System.out.println("LEO LOG: findBulletinByUser SQL EXECUTE FAIL \n\t" 
+								+ e.getSQLState()+ "\n\t" + e.getMessage());
+			System.out.println(sql);
 		}
 		
 		return returnArray;
 	}
 
-	public static ArrayList<Favor> findFavorByUser(String userID){
+	public static ArrayList<Favor> findFavorsByUser(String userID){
 		ArrayList<Favor> returnArray = new ArrayList<Favor>();
 		Favor m_favor;
 		
@@ -210,7 +223,7 @@ public class DataAccess {
 				returnArray.add(m_favor);
 			}
 		} catch (SQLException e) {
-			System.out.println("LEO LOG: findFavorByUser SQL EXECUTE FAIL");			e.printStackTrace();
+			System.out.println("LEO LOG: findFavorByUser SQL EXECUTE FAIL\n\t" + e.getSQLState());			e.printStackTrace();
 		}		
 		return returnArray;
 	}
@@ -239,8 +252,7 @@ public class DataAccess {
 	public static boolean addBulletin(Bulletin bulletin){
 		String sql = "INSERT INTO bulletins "
 				+ "(bulletID, bulletMsg, bulletTime, userID) "
-				+ "VALUES("
-					+ String.valueOf(bulletin.getBulletID())+ ", '"
+				+ "VALUES(null, '"
 					+ bulletin.getBulletMsg() + "', '"
 					+ bulletin.getBulletTime() + "', '"
 					+ bulletin.getUserID() 
@@ -250,7 +262,9 @@ public class DataAccess {
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: addBulletin SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());			
+					+ "\t" + e.getSQLState()
+					+ "\n\t" + e.getMessage());
+			System.out.println(sql);
 		}
 		return false;
 	}
@@ -259,8 +273,7 @@ public class DataAccess {
 		String sql = "INSERT INTO comments "
 				+ "(commentID, commentMsg, "
 				+ "commentTime, userID, bulletID)"
-				+ "VALUES("
-					+ String.valueOf(comment.getCommentID()) + ", '"
+				+ "VALUES( null, '"
 					+ comment.getCommentMsg() + "', '"
 					+ comment.getCommentTime() + "', '"
 					+ comment.getUserID() + "', "
@@ -277,10 +290,23 @@ public class DataAccess {
 	}
 	
 	public static boolean addFavor(Favor favor){
+		String findSql = "SELECT * FROM favors WHERE userId = '"
+				+ favor.getUserID() + "' and bulletID = " + String.valueOf(favor.getBulletID()) ; 
+		try {
+			ResultSet result = m_statement.executeQuery(findSql);
+			if (result.next()) {
+				System.out.println("favor alredy exisits");
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: addFavor SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());			
+		}
+		
+		
 		String sql = "INSERT INTO favors"
 				+ "(favorID, favorTime, userID, bulletID)"
-				+ "VALUES("
-					+ String.valueOf(favor.getFavorID()) + ", '"
+				+ "VALUES(null, '"
 					+ favor.getFavorTime() + "', '"
 					+ favor.getUserID() + "', "
 					+ String.valueOf(favor.getBulletID())
@@ -340,9 +366,9 @@ public class DataAccess {
 		String sql = "UPDATE comments set "
 					+ "commentMsg = '" + commet.getCommentMsg() + "', "
 					+ "commentTime = '" + commet.getCommentTime() + "', "
-					+ "userID = " + String.valueOf(commet.getUserID()) + ", "
+					+ "userID = '" + String.valueOf(commet.getUserID()) + "', "
 					+ "bulletID = " + String.valueOf(commet.getBulletID())
-					+ "WHERE commentID = " 
+					+ " WHERE commentID = " 
 					+ String.valueOf(commet.getCommentID()); 
 				
 		
@@ -351,7 +377,7 @@ public class DataAccess {
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: updateComment; SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());
+					+ "\t" + e.getMessage());
 			return false;
 		}
 	}
@@ -370,12 +396,28 @@ public class DataAccess {
 			return false;
 		}
 	}
+	public static boolean deleteFavor(String userID, int bulletID){
+		String sql = "DELETE FROM favors "
+				+ "WHERE userID = '" + userID + "' "
+				+ "and bulletID = " + String.valueOf(bulletID);
 	
-	public static boolean deleteComment(Comment comment){
+	try {
+		m_statement.executeUpdate(sql);
+		return true;
+	} catch (SQLException e) {
+		System.out.println("LEO LOG: deleteFavor; SQL EXECUTE FAIL: \n"
+				+ "\t" + e.getSQLState());
+		return false;
+	}
+	}
+	
+	
+	
+	public static boolean deleteComment(int commentID){
 		
 		String sql = "DELETE FROM comments "
 					+ "WHERE commentID = "
-					+ String.valueOf(comment.getCommentID());
+					+ String.valueOf(commentID);
 		
 		try {
 			m_statement.executeUpdate(sql);

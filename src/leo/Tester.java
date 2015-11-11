@@ -17,15 +17,23 @@ public class Tester {
 		//DataAccess.deleteComment(1);
 		//DataAccess.deleteFavor(new Favor(3, "sds","U201417138" , 2));
 		//DataAccess.deleteFavor("U201417138" , 1);
-		
+		//DataAccess.deleteBulletin(2);
 		
 		//System.out.println(DataAccess.findStudent("U201417138").getUserEmail());
 		//System.out.println(DataAccess.findFavor(12).getUserID());
 		//System.out.println(DataAccess.findComment(3).getCommentMsg());
 		//System.out.println(DataAccess.findBulletin(1).getBulletMsg());
+		
+		
 		//System.out.println(DataAccess.findFavorsByUser("U201417137").size());
 		//System.out.println(DataAccess.findCommentsByUser("U201417138").get(0).getCommentMsg());
 		//System.out.println(DataAccess.findBulletinsByUser("U201417136").get(0).getBulletMsg());
+		
+		//System.out.println(DataAccess.findCommentByBulletin(1).get(1).getCommentMsg());
+		//System.out.println(DataAccess.findFavorByBulletin(1).get(0).getUserID());
+		
+		
+		
 		
 		
 		DataAccess.terminate();

@@ -2,6 +2,9 @@ package leo;
 
 import java.sql.*;
 import java.util.ArrayList;
+
+import javax.xml.bind.attachment.AttachmentMarshaller;
+
 import leo.datas.*;
 
 public class DataAccess {
@@ -228,6 +231,64 @@ public class DataAccess {
 		return returnArray;
 	}
 	
+	
+
+public static ArrayList<Comment> findCommentByBulletin(int bulletID){
+		ArrayList<Comment> returnArray= new ArrayList<Comment>();
+		Comment m_comment;
+		
+		String sql="SELECT commentID, commentMsg, "
+				+"commentTime, userID FROM comments "
+				+"WHERE bulletID = " + String.valueOf(bulletID);
+		
+		try{
+			ResultSet result= m_statement.executeQuery(sql);
+			while(result.next()){
+				int commentID=result.getInt(1);
+				String commentMsg=result.getString(2);
+				String commentTime=result.getString(3);
+				String userID=result.getString(4);
+				m_comment=new Comment(commentID, commentMsg, commentTime, userID, bulletID);
+				returnArray.add(m_comment);
+			}
+		}catch(SQLException e){
+			System.out.println("LEO LOG: findCommentByBulletin SQL EXECUTE FAIL \n\t" + e.getMessage());
+			System.out.println(e.getSQLState());
+			System.out.println(sql);
+		}
+		
+		return returnArray;	
+	}
+	
+	public static ArrayList<Favor> findFavorByBulletin(int bulletID){
+		ArrayList<Favor> returnArray=new ArrayList<Favor>();
+		Favor m_favor;
+		 
+		String sql = "SELECT favorID, favorTime, userID "
+				+"FROM favors "
+				+"WHERE bulletID = " + String.valueOf(bulletID);
+		
+		try{
+			ResultSet result= m_statement.executeQuery(sql);
+			while(result.next()){
+				int favorID=result.getInt(1);
+				String favorTime=result.getString(2);
+				String userID =result.getString(3);
+				m_favor=new Favor(favorID, favorTime, userID, bulletID);
+				returnArray.add(m_favor);
+			}
+		}catch(SQLException e){
+			System.out.println("LEO LOG: findFavorByBulletin SQL EXECUTE FAIL");
+			System.out.println(sql);
+		}
+		
+		return returnArray;
+	}
+
+	
+	
+	
+	
 	public static boolean addStudent(Student student){
 		String sql = "INSERT INTO students "
 				+ "(userID, userName, userPasswd, "
@@ -412,7 +473,6 @@ public class DataAccess {
 	}
 	
 	
-	
 	public static boolean deleteComment(int commentID){
 		
 		String sql = "DELETE FROM comments "
@@ -429,56 +489,44 @@ public class DataAccess {
 		}
 	}
 	
-/////////////////////////////////////////////////////////////////
-
-public static ArrayList<Comment> findCommentByBulletin(int bulletID){
-		ArrayList<Comment> returnArray= new ArrayList<Comment>();
-		Comment m_comment;
+	
+	
+	public static boolean deleteBulletin(int bulletID){
 		
-		String sql="SELECT commnetID, commentMsg, "
-				+"commentTime FROM bulletins "
-				+"WHERE bulletID = '" + bulletID +"'";
+		ArrayList<Comment> commentsToDel = findCommentByBulletin(bulletID);
+		ArrayList<Favor> favorToDel = findFavorByBulletin(bulletID);
 		
-		try{
-			ResultSet result= m_statement.executeQuery(sql);
-			while(result.next()){
-				int commentID=result.getInt(1);
-				String commentMsg=result.getString(2);
-				String commentTime=result.getString(3);
-				String userID=result.getString(4);
-				m_comment=new Comment(commentID, commentMsg, commentTime, userID, bulletID);
-				returnArray.add(m_comment);
-			}
-		}catch(SQLException e){
-			System.out.println("LEO LOG: findCommentByBulletin SQL EXECUTE FAIL");
+		for(Comment todel : commentsToDel){
+			deleteComment(todel.getCommentID());
 		}
 		
-		return returnArray;	
+		for(Favor todel : favorToDel){
+			deleteFavor(todel.getUserID(), todel.getBulletID());
+		}
+		
+		String sql = "DELETE FROM bulletins "
+					+ "WHERE bulletID = " + String.valueOf(bulletID);
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println(sql);
+			return false;
+		}
+		
+
 	}
 	
-	public static ArrayList<Favor> findFavorByBulletin(int bulletID){
-		ArrayList<Favor> returnArray=new ArrayList<Favor>();
-		Favor m_favor;
-		 
-		String sql = "SELECT favorID, favorTime "
-				+"FROM bulletins "
-				+"WHERE bulletID = '"+ bulletID+"'";
-		
-		try{
-			ResultSet result= m_statement.executeQuery(sql);
-			while(result.next()){
-				int favorID=result.getInt(1);
-				String favorTime=result.getString(2);
-				String userID =result.getString(3);
-				m_favor=new Favor(favorID, favorTime, userID, bulletID);
-				returnArray.add(m_favor);
-			}
-		}catch(SQLException e){
-			System.out.println("LEO LOG: findFavorByBulletin SQL EXECUTE FAIL");
-		}
-		
-		return returnArray;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
 }

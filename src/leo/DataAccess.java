@@ -271,9 +271,9 @@ public class DataAccess {
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: addComment SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());			
+					+ "\t" + e.getSQLState());	
+			return false;
 		}
-		return false;
 	}
 	
 	public static boolean addFavor(Favor favor){
@@ -294,5 +294,98 @@ public class DataAccess {
 		}
 		return false;
 	}
+
+	public static boolean updateStudent(Student student){
+		
+		String sql = "UPDATE students set "
+					+ "userName = '" + student.getUserName() + "', "
+					+ "userPasswd = '" + student.getUserPasswd() + "', "
+					+ "userAuth = " + String.valueOf(student.getUserAuth()) + ", "
+					+ "userEmail = '" + student.getUserEmail()+ "' "
+					+ "WHERE userID = '" + student.getUserID() + "'";
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: updateStudent SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());
+			return false;
+		}
+		
+		
+	}
+	
+	public static boolean updateBulletin(Bulletin bulletin){
+		
+		String sql = "UPDATE bulletins set "
+					+ "bulletMsg = '" + bulletin.getBulletMsg()+ "', "
+					+ "bulletTime = '"+ bulletin.getBulletTime() + "', "
+					+ "userID = '" + bulletin.getUserID() + "'"
+					+ "WHERE bulletID = " 
+					+ String.valueOf(bulletin.getBulletID());
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: updateBulletin; SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());
+			return false;
+		}
+	}
+	
+	public static boolean updateComments(Comment commet){
+		
+		String sql = "UPDATE comments set "
+					+ "commentMsg = '" + commet.getCommentMsg() + "', "
+					+ "commentTime = '" + commet.getCommentTime() + "', "
+					+ "userID = " + String.valueOf(commet.getUserID()) + ", "
+					+ "bulletID = " + String.valueOf(commet.getBulletID())
+					+ "WHERE commentID = " 
+					+ String.valueOf(commet.getCommentID()); 
+				
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: updateComment; SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());
+			return false;
+		}
+	}
+	
+	public static boolean deleteFavor(Favor favor){
+		String sql = "DELETE FROM favors "
+					+ "WHERE favorID = "
+					+ String.valueOf(favor.getFavorID());
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: deleteFavor; SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());
+			return false;
+		}
+	}
+	
+	public static boolean deleteComment(Comment comment){
+		
+		String sql = "DELETE FROM comments "
+					+ "WHERE commentID = "
+					+ String.valueOf(comment.getCommentID());
+		
+		try {
+			m_statement.executeUpdate(sql);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: deleteComment; SQL EXECUTE FAIL: \n"
+					+ "\t" + e.getSQLState());
+			return false;
+		}
+	}
+	
 	
 }

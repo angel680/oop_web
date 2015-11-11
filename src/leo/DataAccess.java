@@ -429,5 +429,56 @@ public class DataAccess {
 		}
 	}
 	
+/////////////////////////////////////////////////////////////////
+
+public static ArrayList<Comment> findCommentByBulletin(int bulletID){
+		ArrayList<Comment> returnArray= new ArrayList<Comment>();
+		Comment m_comment;
+		
+		String sql="SELECT commnetID, commentMsg, "
+				+"commentTime FROM bulletins "
+				+"WHERE bulletID = '" + bulletID +"'";
+		
+		try{
+			ResultSet result= m_statement.executeQuery(sql);
+			while(result.next()){
+				int commentID=result.getInt(1);
+				String commentMsg=result.getString(2);
+				String commentTime=result.getString(3);
+				String userID=result.getString(4);
+				m_comment=new Comment(commentID, commentMsg, commentTime, userID, bulletID);
+				returnArray.add(m_comment);
+			}
+		}catch(SQLException e){
+			System.out.println("LEO LOG: findCommentByBulletin SQL EXECUTE FAIL");
+		}
+		
+		return returnArray;	
+	}
+	
+	public static ArrayList<Favor> findFavorByBulletin(int bulletID){
+		ArrayList<Favor> returnArray=new ArrayList<Favor>();
+		Favor m_favor;
+		 
+		String sql = "SELECT favorID, favorTime "
+				+"FROM bulletins "
+				+"WHERE bulletID = '"+ bulletID+"'";
+		
+		try{
+			ResultSet result= m_statement.executeQuery(sql);
+			while(result.next()){
+				int favorID=result.getInt(1);
+				String favorTime=result.getString(2);
+				String userID =result.getString(3);
+				m_favor=new Favor(favorID, favorTime, userID, bulletID);
+				returnArray.add(m_favor);
+			}
+		}catch(SQLException e){
+			System.out.println("LEO LOG: findFavorByBulletin SQL EXECUTE FAIL");
+		}
+		
+		return returnArray;
+	}
+
 	
 }

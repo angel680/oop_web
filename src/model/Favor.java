@@ -1,4 +1,4 @@
-package leo.datas;
+package model;
 
 public class Favor {
 	private int favorID;

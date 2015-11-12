@@ -1,19 +1,26 @@
-package leo;
+package dbaccess;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-import javax.xml.bind.attachment.AttachmentMarshaller;
-
-import leo.datas.*;
+import model.*;
 
 public class DataAccess {
 	
-	static Connection m_connet = null;
-	static Statement m_statement = null;
-	static String url = "jdbc:sqlite:";
+	private Connection m_connet = null;
+	private Statement m_statement = null;
+	private String url = "jdbc:sqlite:";
 	
-	public static Connection init(String path){
+	public DataAccess() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public DataAccess(String path){
+		init(path);
+	}
+	
+	
+	public Connection init(String path){
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -35,7 +42,7 @@ public class DataAccess {
 		return m_connet;
 	}
 	
-	public static void terminate(){
+	public void terminate(){
 		try {
 			m_statement.close();
 			m_connet.close();
@@ -45,7 +52,8 @@ public class DataAccess {
 		
 	}
 	
-	public static Student findStudent(String userID){
+	
+	public Student findStudent(String userID){
 		Student m_student = null;
 		
 		String sql = "SELECT userName, userPasswd, "
@@ -71,7 +79,7 @@ public class DataAccess {
 		return m_student;
 	}
 
-	public static Bulletin findBulletin(int bulletID){
+	public Bulletin findBulletin(int bulletID){
 		Bulletin m_bulletin = null;
 		
 		String sql = "SELECT bulletMsg, bulletTime, "
@@ -99,7 +107,7 @@ public class DataAccess {
 		return m_bulletin;
 	}
 	
-	public static Comment findComment(int commentID){
+	public Comment findComment(int commentID){
 		Comment m_comment = null;
 		String sql = "SELECT commentMsg, commentTime, userID, "
 					+ "bulletID FROM comments "
@@ -125,7 +133,7 @@ public class DataAccess {
 		return m_comment;
 	}
 	
-	public static Favor findFavor(int favorID){
+	public Favor findFavor(int favorID){
 		Favor m_favor = null;
 		String sql = "SELECT favorTime, userID, bulletID "
 				+ "FROM favors "
@@ -153,7 +161,7 @@ public class DataAccess {
 		return m_favor;
 	}
 	
-	public static ArrayList<Comment> findCommentsByUser(String userID){
+	public  ArrayList<Comment> findCommentsByUser(String userID){
 		ArrayList<Comment> returnArray = new ArrayList<Comment>();
 		Comment m_comment;
 		
@@ -180,7 +188,7 @@ public class DataAccess {
 		return returnArray;
 	}
 	
-	public static ArrayList<Bulletin> findBulletinsByUser(String userID){
+	public ArrayList<Bulletin> findBulletinsByUser(String userID){
 		ArrayList<Bulletin> returnArray = new ArrayList<Bulletin>();
 		Bulletin m_Bulletin;
 		
@@ -208,7 +216,7 @@ public class DataAccess {
 		return returnArray;
 	}
 
-	public static ArrayList<Favor> findFavorsByUser(String userID){
+	public ArrayList<Favor> findFavorsByUser(String userID){
 		ArrayList<Favor> returnArray = new ArrayList<Favor>();
 		Favor m_favor;
 		
@@ -233,7 +241,7 @@ public class DataAccess {
 	
 	
 
-public static ArrayList<Comment> findCommentByBulletin(int bulletID){
+public ArrayList<Comment> findCommentByBulletin(int bulletID){
 		ArrayList<Comment> returnArray= new ArrayList<Comment>();
 		Comment m_comment;
 		
@@ -260,7 +268,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		return returnArray;	
 	}
 	
-	public static ArrayList<Favor> findFavorByBulletin(int bulletID){
+	public ArrayList<Favor> findFavorByBulletin(int bulletID){
 		ArrayList<Favor> returnArray=new ArrayList<Favor>();
 		Favor m_favor;
 		 
@@ -289,7 +297,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 	
 	
 	
-	public static boolean addStudent(Student student){
+	public boolean addStudent(Student student){
 		String sql = "INSERT INTO students "
 				+ "(userID, userName, userPasswd, "
 				+ "userAuth, userEmail) "
@@ -310,7 +318,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		return false;
 	}
 	
-	public static boolean addBulletin(Bulletin bulletin){
+	public boolean addBulletin(Bulletin bulletin){
 		String sql = "INSERT INTO bulletins "
 				+ "(bulletID, bulletMsg, bulletTime, userID) "
 				+ "VALUES(null, '"
@@ -330,7 +338,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		return false;
 	}
 	
-	public static boolean addComment(Comment comment){
+	public boolean addComment(Comment comment){
 		String sql = "INSERT INTO comments "
 				+ "(commentID, commentMsg, "
 				+ "commentTime, userID, bulletID)"
@@ -350,7 +358,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		}
 	}
 	
-	public static boolean addFavor(Favor favor){
+	public boolean addFavor(Favor favor){
 		String findSql = "SELECT * FROM favors WHERE userId = '"
 				+ favor.getUserID() + "' and bulletID = " + String.valueOf(favor.getBulletID()) ; 
 		try {
@@ -382,7 +390,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		return false;
 	}
 
-	public static boolean updateStudent(Student student){
+	public boolean updateStudent(Student student){
 		
 		String sql = "UPDATE students set "
 					+ "userName = '" + student.getUserName() + "', "
@@ -392,7 +400,9 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 					+ "WHERE userID = '" + student.getUserID() + "'";
 		
 		try {
-			m_statement.executeUpdate(sql);
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: updateStudent SQL EXECUTE FAIL: \n"
@@ -403,7 +413,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		
 	}
 	
-	public static boolean updateBulletin(Bulletin bulletin){
+	public boolean updateBulletin(Bulletin bulletin){
 		
 		String sql = "UPDATE bulletins set "
 					+ "bulletMsg = '" + bulletin.getBulletMsg()+ "', "
@@ -413,7 +423,9 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 					+ String.valueOf(bulletin.getBulletID());
 		
 		try {
-			m_statement.executeUpdate(sql);
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: updateBulletin; SQL EXECUTE FAIL: \n"
@@ -422,7 +434,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		}
 	}
 	
-	public static boolean updateComments(Comment commet){
+	public boolean updateComments(Comment commet){
 		
 		String sql = "UPDATE comments set "
 					+ "commentMsg = '" + commet.getCommentMsg() + "', "
@@ -434,7 +446,9 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 				
 		
 		try {
-			m_statement.executeUpdate(sql);
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: updateComment; SQL EXECUTE FAIL: \n"
@@ -443,13 +457,15 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 		}
 	}
 	
-	public static boolean deleteFavor(Favor favor){
+	public boolean deleteFavor(Favor favor){
 		String sql = "DELETE FROM favors "
 					+ "WHERE favorID = "
 					+ String.valueOf(favor.getFavorID());
 		
 		try {
-			m_statement.executeUpdate(sql);
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: deleteFavor; SQL EXECUTE FAIL: \n"
@@ -457,13 +473,15 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 			return false;
 		}
 	}
-	public static boolean deleteFavor(String userID, int bulletID){
+	public boolean deleteFavor(String userID, int bulletID){
 		String sql = "DELETE FROM favors "
 				+ "WHERE userID = '" + userID + "' "
 				+ "and bulletID = " + String.valueOf(bulletID);
 	
 	try {
-		m_statement.executeUpdate(sql);
+		if (m_statement.executeUpdate(sql) == 0) {
+			return false;
+		}
 		return true;
 	} catch (SQLException e) {
 		System.out.println("LEO LOG: deleteFavor; SQL EXECUTE FAIL: \n"
@@ -473,14 +491,16 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 	}
 	
 	
-	public static boolean deleteComment(int commentID){
+	public boolean deleteComment(int commentID){
 		
 		String sql = "DELETE FROM comments "
 					+ "WHERE commentID = "
 					+ String.valueOf(commentID);
 		
 		try {
-			m_statement.executeUpdate(sql);
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: deleteComment; SQL EXECUTE FAIL: \n"
@@ -491,7 +511,7 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 	
 	
 	
-	public static boolean deleteBulletin(int bulletID){
+	public boolean deleteBulletin(int bulletID){
 		
 		ArrayList<Comment> commentsToDel = findCommentByBulletin(bulletID);
 		ArrayList<Favor> favorToDel = findFavorByBulletin(bulletID);
@@ -508,16 +528,74 @@ public static ArrayList<Comment> findCommentByBulletin(int bulletID){
 					+ "WHERE bulletID = " + String.valueOf(bulletID);
 		
 		try {
-			m_statement.executeUpdate(sql);
+			
+			if (m_statement.executeUpdate(sql) == 0) {
+				return false;
+			}
 			return true;
 		} catch (SQLException e) {
 			System.out.println(sql);
 			return false;
 		}
-		
+				
 
 	}
+	public ArrayList<Bulletin> getAllBulletins(){
+		ArrayList<Bulletin> returnArray = new ArrayList<Bulletin>();
+		Bulletin m_Bulletin;
+		
+		String sql = "SELECT bulletID, bulletMsg, "
+				+ "bulletTime, userID FROM bulletins ";
+		try {
+			ResultSet result = m_statement.executeQuery(sql);
+			while(result.next()){
+				int bulletID = result.getInt(1);
+				String bulletMsg = result.getString(2);
+				String bulletTime = result.getString(3);
+				String userID = result.getString(4);
+				m_Bulletin = new Bulletin(bulletID, bulletMsg,
+						bulletTime, userID);
+				returnArray.add(m_Bulletin);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: findAllBulletins SQL EXECUTE FAIL \n\t" 
+								+ e.getSQLState()+ "\n\t" + e.getMessage());
+			System.out.println(sql);
+		}
+		return returnArray;
+	}
 	
+	public ArrayList<Student> getAllStudents(){
+		ArrayList<Student> returnArray = new ArrayList<Student>();
+		Student m_student;
+		
+		String sql = "SELECT userID, userName, userPasswd, userAuth, userEmail "
+				+ "FROM students";
+		
+		try {
+			ResultSet result = m_statement.executeQuery(sql);
+			while(result.next()){
+				String userID = result.getString(1);
+				String userName = result.getString(2);
+				String userPasswd = result.getString(3);
+				int userAuth = result.getInt(4);
+				String userEmail = result.getString(5);
+				
+				m_student = new Student(userID, userName, userPasswd, userAuth, userEmail);
+				returnArray.add(m_student);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: findAllStudents SQL EXECUTE FAIL \n\t" 
+								+ e.getSQLState()+ "\n\t" + e.getMessage());
+			System.out.println(sql);
+		}
+		
+		
+		
+		return returnArray;
+	}
 	
 	
 	

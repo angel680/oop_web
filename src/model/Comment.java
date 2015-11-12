@@ -1,4 +1,4 @@
-package leo.datas;
+package model;
 
 public class Comment {
 	private int commentID;

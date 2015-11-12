@@ -1,4 +1,4 @@
-package leo.datas;
+package model;
 
 public class Bulletin {
 	private int bulletID;

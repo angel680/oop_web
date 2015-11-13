@@ -598,7 +598,31 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 	}
 	
 	
-	
+	public Student findStudentbyEmail(String userEmail){
+		
+		Student m_student = null;
+		String sql="SELECT userID, userName, userPasswd, userAuth "
+				+ "FROM students "
+				+ "WHERE userEmail = '"+ userEmail + "'";
+		try{
+			ResultSet result = m_statement.executeQuery(sql);
+			
+			String userID = result.getString(1);
+			String userName = result.getString(2);
+			String userPasswd = result.getString(3);
+			int userAuth = result.getInt(4);
+			
+			m_student = new Student(userID, userName, userPasswd, userAuth, userEmail);
+			
+			System.out.println(sql);
+		}catch(SQLException e){
+			System.out.println("LEO LOG: findStudentByEmail SQL EXECUTE FAIL \n\t" 
+					+ e.getSQLState()+ "\n\t" + e.getMessage());
+			System.out.println(sql);
+		}
+		
+		return m_student;
+	}
 	
 	
 	

@@ -429,7 +429,7 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: updateBulletin; SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());
+					+ "\t" + e.getMessage());
 			return false;
 		}
 	}
@@ -614,11 +614,11 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 			
 			m_student = new Student(userID, userName, userPasswd, userAuth, userEmail);
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 		}catch(SQLException e){
 			System.out.println("LEO LOG: findStudentByEmail SQL EXECUTE FAIL \n\t" 
 					+ e.getSQLState()+ "\n\t" + e.getMessage());
-			System.out.println(sql);
+			//System.out.println(sql);
 		}
 		
 		return m_student;

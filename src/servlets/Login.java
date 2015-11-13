@@ -21,7 +21,7 @@ public class Login extends HttpServlet {
      */
     public Login() {
         super();
-        System.out.println("new: ");
+        //System.out.println("new: ");
        
     }
 	 public void init() throws ServletException
@@ -57,10 +57,9 @@ public class Login extends HttpServlet {
 	 
 	  public void doGet(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException
 	  {
-     // Set response content type
-	     
-	      
-			
+		    
+		  
+		  
 	  }
 	
 

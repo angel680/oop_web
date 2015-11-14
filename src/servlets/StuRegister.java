@@ -49,6 +49,10 @@ public class StuRegister extends HttpServlet {
 			StudentManager stumgr = new StudentManager(root + "db/datas.db");
 			boolean issucceed =  stumgr.studentRegister(toadd);
 					
+			System.out.println(userID);
+			System.out.println(userName);
+			System.out.println(userPasswd);
+			System.out.println(userEmail);
 			
 			response.setContentType("text/plain");
 			PrintWriter out = response.getWriter();
@@ -60,6 +64,7 @@ public class StuRegister extends HttpServlet {
 			String userEmail = request.getParameter("userEmail");
 			
 			
+			
 			if(userID != null){
 				StudentManager stumgr = new StudentManager(root + "db/datas.db");
 				
@@ -68,6 +73,7 @@ public class StuRegister extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(String.valueOf(isexsits));
 				out.flush();
+				
 			}
 			if(userEmail != null){
 				StudentManager stumgr = new StudentManager(root + "db/datas.db");
@@ -77,6 +83,7 @@ public class StuRegister extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(String.valueOf(isexsits));
 				out.flush();
+	
 			}
 			
 		

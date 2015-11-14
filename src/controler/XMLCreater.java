@@ -3,6 +3,7 @@ package controler;
 import java.util.ArrayList;
 
 import model.Bulletin;
+import model.Comment;
 import dbaccess.DataAccess;
 
 public class XMLCreater {
@@ -24,6 +25,19 @@ public class XMLCreater {
 			xmldoc.append("<bulletTime>" + bullet.getBulletTime() +"</bulletTime>");
 			xmldoc.append("<userName>" + username + "</userName>");
 			xmldoc.append("<bulletFavors>" + favorNum + "</bulletFavors>");
+			xmldoc.append("<allComments>");
+			ArrayList<Comment> commentsArray = da.findCommentByBulletin(bullet.getBulletID());
+				for(Comment comment : commentsArray){
+					String cusername = da.findStudent(comment.getUserID()).getUserName();
+					xmldoc.append("<comment>");
+					xmldoc.append("<commentID>" + String.valueOf(comment.getCommentID()) + "</commentID>");
+					xmldoc.append("<commentMsg>" + comment.getCommentMsg() + "</commentMsg>");
+					xmldoc.append("<commentTime>" + comment.getCommentTime()+ "</commentTime>");
+					xmldoc.append("<cuserName>" + cusername + "</cuserName>");
+					xmldoc.append("</comment>");
+				}
+			
+			xmldoc.append("</allComments>");
 			xmldoc.append("</bullet>");
 		}
 		

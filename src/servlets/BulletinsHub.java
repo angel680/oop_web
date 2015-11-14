@@ -27,12 +27,7 @@ public class BulletinsHub extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-    }
-
-
-    
+  
     
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String reqtype = request.getParameter("reqtype");
@@ -65,7 +60,11 @@ public class BulletinsHub extends HttpServlet {
 					PrintWriter out = response.getWriter();
 					out.println("updated");
 			        out.flush();
-				}				
+				}else{
+					PrintWriter out = response.getWriter();
+					out.println("failed");
+			        out.flush();
+				}
 			}
 		}
 		

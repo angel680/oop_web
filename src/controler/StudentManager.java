@@ -14,8 +14,10 @@ public class StudentManager {
 		Student find =  da.findStudent(userID);
 		
 		if (find == null) {
+			da.terminate();
 			return false;
 		}else {
+			da.terminate();
 			return true;
 		}
 	}
@@ -25,8 +27,10 @@ public class StudentManager {
 		Student find = da.findStudentbyEmail(userEmail);
 		
 		if(find == null){
+			da.terminate();
 			return false;
 		}else{
+			da.terminate();
 			return true;
 		}
 	}
@@ -34,7 +38,9 @@ public class StudentManager {
 	public boolean studentRegister(Student student){
 		
 		DataAccess da = new DataAccess(dbpath);
-		return da.addStudent(student);
+		boolean issucceed = da.addStudent(student);
+		da.terminate();
+		return issucceed;
 	}
 	
 	

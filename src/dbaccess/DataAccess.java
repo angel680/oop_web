@@ -313,7 +313,7 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: addStudent SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());
+					+ "\t" + e.getMessage());
 		}
 		return false;
 	}
@@ -606,13 +606,13 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 				+ "WHERE userEmail = '"+ userEmail + "'";
 		try{
 			ResultSet result = m_statement.executeQuery(sql);
-			
-			String userID = result.getString(1);
-			String userName = result.getString(2);
-			String userPasswd = result.getString(3);
-			int userAuth = result.getInt(4);
-			
-			m_student = new Student(userID, userName, userPasswd, userAuth, userEmail);
+			if (result.next()) {
+				String userID = result.getString(1);
+				String userName = result.getString(2);
+				String userPasswd = result.getString(3);
+				int userAuth = result.getInt(4);
+				m_student = new Student(userID, userName, userPasswd, userAuth, userEmail);
+			}
 			
 			//System.out.println(sql);
 		}catch(SQLException e){

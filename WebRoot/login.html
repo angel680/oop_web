@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>班级管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/main1.css">
+</head>
+
+<body>
+    <div id="container">
+        <div id="welcome">
+            <p>华中科技大学班级管理系统</p>
+        </div>
+        <div id="loginFormContainer">
+            <div id="loginForm">
+                <form action="" method="get">
+                    <div class="forms">
+                        <span> 账号</span>
+                        <input id="userName" class="text" type="text">
+                    </div>
+                    <div class="froms">
+                        <span>密码</span>
+                        <input id="userPassword" class="text" type="password">
+                    </div>
+                    <div class="forms">
+                        <input class="btn" id="btnLogin" type="submit" value="确定">
+                        <input class="btn" id="btnRegister" value="注册">
+                    </div>
+                </form>
+           </div>
+        </div>
+        <div id="copyright">
+            <p>版权所有，仿冒必究。</p>
+            <p>联系我们：499268253（李晨达）</p>
+        </div>
+    </div>
+
+
+    <div id="registerForm">
+            <label for="newUserNumber">账号 </label>
+        
+            <input id="newUserNumber" name = "userID" class="texts" type="text">
+            <img id="newUserNumberpic">
+        
+            <label for="newUserName">姓名</label>
+            <input id="newUserName" name = "userName" class="texts" type="text">
+            <img id="newUserNamepic" >
+        
+            <label for="newUserPassword">密码</label>
+            <input id="newUserPassword" name = "userPasswd" class="texts" type="password">
+            <img id="newUserPasswordpic">
+        
+            <label for="newUserPasswords">确认密码</label>
+            <input id="newUserPasswords" class="texts" type="password">
+            <img id="newUserPasswordspic">
+
+            <label for="newUserEmail">邮箱</label>
+            <input id="newUserEmail" name = "userEmail" class="texts" type="email">
+            <img id="newUserEmailpic">
+            <p id="alert"> </p>
+            <div id="rebtn">
+            <input class="btns" id="btnRegisters" type="submit" value="注册">
+            <input class="btns" id="btnCancel" type="submit" value="取消">
+        </div>
+    </div>
+    <script type="text/javascript" src="js/main1.js"></script>
+</body>
+
+</html>

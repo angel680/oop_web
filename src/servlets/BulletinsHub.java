@@ -44,6 +44,7 @@ public class BulletinsHub extends HttpServlet {
 		if(reqtype.equals("update")){
 			
 			String bulletID =request.getParameter("bulletID");
+			String bulletTitle = request.getParameter("bulletTitle");
 			String bulletMsg = request.getParameter("bulletMsg");
 			String userID = request.getParameter("userID");
 			
@@ -55,7 +56,7 @@ public class BulletinsHub extends HttpServlet {
 				return;
 			}else {
 				BulletinsManager bm = new BulletinsManager(path);
-				if(bm.updateBulletin(Integer.valueOf(bulletID), bulletMsg, userID)){
+				if(bm.updateBulletin(Integer.valueOf(bulletID),bulletTitle, bulletMsg, userID)){
 					response.setContentType("text/plain;charset=utf-8");
 					PrintWriter out = response.getWriter();
 					out.println("updated");

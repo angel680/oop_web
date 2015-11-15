@@ -14,14 +14,14 @@ public class BulletinsManager {
 	}
 	
 	
-	public boolean updateBulletin(int bulletID, String bulletMsg,String userID){
+	public boolean updateBulletin(int bulletID,String bulletTitle, String bulletMsg,String userID){
 		
 		DataAccess da = new DataAccess(dbpath);
 		
 		String bulletTime = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG,
 				Locale.CHINESE).format(new java.util.Date());
 
-		Bulletin toupdate = new Bulletin(bulletID, bulletMsg, bulletTime, userID);
+		Bulletin toupdate = new Bulletin(bulletID,bulletTitle, bulletMsg, bulletTime, userID);
 		boolean succeed = da.updateBulletin(toupdate);
 		da.terminate();
 		return succeed;

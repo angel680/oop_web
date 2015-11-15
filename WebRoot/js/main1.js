@@ -4,6 +4,15 @@ var loginForm = document.getElementById("loginForm");
 var registerForm = document.getElementById("registerForm");
 var btnCancel = document.getElementById("btnCancel");
 var btnRegisters = document.getElementById("btnRegisters");
+var btnLogin = document.getElementById("btnLogin");
+
+
+
+
+
+
+
+
 btnRegister.onclick = function() {
 
     loginForm.style.visibility = "hidden";
@@ -67,7 +76,7 @@ var funcSend = function() {
 				if (xmlhttp.responseText == "true")
 				{
 					alert ("恭喜您注册成功");
-					funcCancel.call();
+					Cancel.call();
 					
 				} 
 				else
@@ -123,8 +132,8 @@ var funcDemand = function() {
                 else {
                     ise = true;
                 }
-            } 
-            else {
+            } else if(xmlhttp.responseText == "true")
+             {
                 document.getElementById(eleID + "pic").style.visibility = "visible";
                 document.getElementById(eleID + "pic").src = "img/flase.png";
 
@@ -132,11 +141,13 @@ var funcDemand = function() {
                 if (eleID == "newUserNumber") {
                 alertText.innerHTML = "您输入的账号已经存在！";
                 } else {
-                alertText.innerHTML = "您输入的邮箱已存在！"
+                alertText.innerHTML = "该邮箱已存在！"
                 }
+             }else if(xmlhttp.responseText == "wrong"){
+            	 document.getElementById(eleID + "pic").style.visibility = "visible";
+                 document.getElementById(eleID + "pic").src = "img/flase.png";               
+                 alertText.innerHTML = "邮箱格式不正确！"
              }
-
-            
 
         }
     };

@@ -43,5 +43,25 @@ public class StudentManager {
 		return issucceed;
 	}
 	
+	public Student getStudent(String userID){
+		DataAccess da = new DataAccess(dbpath);
+		Student stu =  da.findStudent(userID);
+		da.terminate();
+		return stu;
+	}
+	
+	
+	public boolean checkLogin(String userID, String userPasswd){
+		DataAccess da = new DataAccess(dbpath);
+		Student stu =  da.findStudent(userID);
+		da.terminate();
+		if (stu == null) {
+			//System.out.println("checkLogin: student not found");
+			return false;
+		}else{
+			//System.out.println("database said:" + stu.getUserPasswd());
+			return (stu.getUserPasswd().equals(userPasswd));
+		}	
+	}
 	
 }

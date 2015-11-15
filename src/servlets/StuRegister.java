@@ -2,6 +2,8 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -76,13 +78,26 @@ public class StuRegister extends HttpServlet {
 				
 			}
 			if(userEmail != null){
-				StudentManager stumgr = new StudentManager(root + "db/datas.db");
 				
-				boolean isexsits = stumgr.cheakEmail(userEmail);
-				response.setContentType("text/plain");
-				PrintWriter out = response.getWriter();
-				out.print(String.valueOf(isexsits));
-				out.flush();
+				String regex ="([a-zA-Z0-9]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+				Pattern p = Pattern.compile(regex);
+				
+				Matcher m = p.matcher(userEmail);
+				//System.out.println(m.matches());
+				if (m.matches()) {
+					StudentManager stumgr = new StudentManager(root + "db/datas.db");
+					
+					boolean isexsits = stumgr.cheakEmail(userEmail);
+					response.setContentType("text/plain");
+					PrintWriter out = response.getWriter();
+					out.print(String.valueOf(isexsits));
+					out.flush();
+				}else {
+					PrintWriter out = response.getWriter();
+					out.print("wrong");
+					out.flush();
+				}
+				
 	
 			}
 			

@@ -2,12 +2,14 @@ package model;
 
 public class Bulletin {
 	private int bulletID;
+	private String bulletTitle;
 	private String bulletMsg;
 	private String bulletTime;
 	private String userID;
 	
-	public Bulletin(int bulletID, String bulletMsg, String bulletTime, String userID){
+	public Bulletin(int bulletID,String bulletTitle, String bulletMsg, String bulletTime, String userID){
 		setBulletID(bulletID);
+		setBulletTitle(bulletTitle);
 		setBulletMsg(bulletMsg);
 		setBulletTime(bulletTime);
 		setUserID(userID);
@@ -37,5 +39,15 @@ public class Bulletin {
 	}
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+
+	public String getBulletTitle() {
+		return bulletTitle;
+	}
+
+
+	public void setBulletTitle(String bulletTitle) {
+		this.bulletTitle = bulletTitle;
 	}
 }

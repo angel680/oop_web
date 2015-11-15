@@ -82,17 +82,18 @@ public class DataAccess {
 	public Bulletin findBulletin(int bulletID){
 		Bulletin m_bulletin = null;
 		
-		String sql = "SELECT bulletMsg, bulletTime, "
+		String sql = "SELECT bulletTitle, bulletMsg, bulletTime, "
 					+ "userID FROM bulletins "
 					+ "WHERE bulletID = " + String.valueOf(bulletID);
 		
 		try {
 			ResultSet result = m_statement.executeQuery(sql);
 			if (result.next()) {
-				String bulletMsg = result.getString(1);
-				String bulletTime = result.getString(2);
-				String userID = result.getString(3);
-				m_bulletin = new Bulletin(bulletID, 
+				String bulletTitle = result.getString(1);
+				String bulletMsg = result.getString(2);
+				String bulletTime = result.getString(3);
+				String userID = result.getString(4);
+				m_bulletin = new Bulletin(bulletID, bulletTitle,
 						bulletMsg, bulletTime, userID);
 			}else {
 				m_bulletin = null;
@@ -192,7 +193,7 @@ public class DataAccess {
 		ArrayList<Bulletin> returnArray = new ArrayList<Bulletin>();
 		Bulletin m_Bulletin;
 		
-		String sql = "SELECT bulletID, bulletMsg, "
+		String sql = "SELECT bulletID, bulletTitle, bulletMsg, "
 				+ "bulletTime FROM bulletins "
 				+ "WHERE userID = '" + userID + "'";
 		
@@ -200,9 +201,10 @@ public class DataAccess {
 			ResultSet result = m_statement.executeQuery(sql);
 			while(result.next()){
 				int bulletID = result.getInt(1);
-				String bulletMsg = result.getString(2);
-				String bulletTime = result.getString(3);
-				m_Bulletin = new Bulletin(bulletID, bulletMsg,
+				String bulletTitle = result.getString(2);
+				String bulletMsg = result.getString(3);
+				String bulletTime = result.getString(4);
+				m_Bulletin = new Bulletin(bulletID, bulletTitle, bulletMsg,
 						bulletTime, userID);
 				returnArray.add(m_Bulletin);
 			}
@@ -320,8 +322,9 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 	
 	public boolean addBulletin(Bulletin bulletin){
 		String sql = "INSERT INTO bulletins "
-				+ "(bulletID, bulletMsg, bulletTime, userID) "
+				+ "(bulletID, bulletTitle, bulletMsg, bulletTime, userID) "
 				+ "VALUES(null, '"
+					+ bulletin.getBulletTitle() + "', '"
 					+ bulletin.getBulletMsg() + "', '"
 					+ bulletin.getBulletTime() + "', '"
 					+ bulletin.getUserID() 
@@ -416,6 +419,7 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 	public boolean updateBulletin(Bulletin bulletin){
 		
 		String sql = "UPDATE bulletins set "
+					+ "bulletTitle = '" + bulletin.getBulletTitle()+ "', "
 					+ "bulletMsg = '" + bulletin.getBulletMsg()+ "', "
 					+ "bulletTime = '"+ bulletin.getBulletTime() + "', "
 					+ "userID = '" + bulletin.getUserID() + "'"
@@ -544,16 +548,17 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 		ArrayList<Bulletin> returnArray = new ArrayList<Bulletin>();
 		Bulletin m_Bulletin;
 		
-		String sql = "SELECT bulletID, bulletMsg, "
+		String sql = "SELECT bulletID, bulletTitle, bulletMsg, "
 				+ "bulletTime, userID FROM bulletins ";
 		try {
 			ResultSet result = m_statement.executeQuery(sql);
 			while(result.next()){
 				int bulletID = result.getInt(1);
-				String bulletMsg = result.getString(2);
-				String bulletTime = result.getString(3);
-				String userID = result.getString(4);
-				m_Bulletin = new Bulletin(bulletID, bulletMsg,
+				String bulletTitle = result.getString(2);
+				String bulletMsg = result.getString(3);
+				String bulletTime = result.getString(4);
+				String userID = result.getString(5);
+				m_Bulletin = new Bulletin(bulletID, bulletTitle,bulletMsg,
 						bulletTime, userID);
 				returnArray.add(m_Bulletin);
 			}

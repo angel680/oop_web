@@ -40,12 +40,125 @@ body {
 	width: 1200px;
 	margin: 100px auto 0 auto;
 	background-color: rgba(141,200,182,0.6);
-	height: 9000px;
+	
 }
 
 .bulletin {
 	width: 900px;
 	margin: 80px auto 80px auto;
-	height: 420px;
 	background-color: rgba(223,238,231,1);
+}
+
+
+.headpic {
+	width: 75px;
+	height: 75px;
+	padding: 30px 0 20px 60px;
+	float: left;
+
+}
+
+.bulletinTime {
+	float: right;
+	line-height: 125px;
+	font-size: 38px;
+	margin: 0;
+
+}
+.bulletinMain:before {
+	content: ".";
+	visibility: hidden;
+	display: block;
+	height: 0;
+
+}
+.bulletinMain {
+	border-top: 2px #3DC2CC solid;
+	border-bottom:  2px #3DC2CC solid;
+	clear: both;
+}
+
+.bulletinMainSon {
+	width: 720px;
+	margin: 20px auto;
+	background-color: #17BA8A;
+	border: 2px #351CD0 solid;
+	min-height: 160px;
+	padding: 0 30px;
+
+}
+.bulletinTitle
+{
+	
+
+	line-height: 60px;
+	font-size: 40px;
+	text-align: center;
+}
+.bulletinContent {
+	line-height: 30px;
+	font-size: 15px;
+}
+.bulletinBtn {
+	padding: 0 100px;
+	border-bottom: 2px #351CD0 solid;
+
+}
+
+.bulletinLike {
+	width: 100px;
+	height: 60px;
+	margin: 0;
+	padding:0;
+	background-image: url(../img/picLike.png);
+	background-size: 100px 60px;
+	margin-right:300px;
+}
+.bulletinCommentBtn {
+	width: 100px;
+	height: 60px;
+	margin: 0;
+	padding:0;
+	font-size: 35px;
+	line-height: 60px;
+	text-align: center;
+
+}
+
+.bulletinComment{
+	padding: 0 50px;
+	display: none;
+}
+
+.bulletinCommentName {
+	float: left;
+
+}
+.bulletinCommentCon {
+	float: left;
+}
+.bulletinCommentTime {
+	clear: both;
+	text-align: right;
+}
+
+.bulletinCommentInput {
+	width: 600px;
+	height: 40px;
+	margin-left:0px;
+}
+.bulletinCommentInputBtn {
+	width: 150px;
+	height: 40px;
+	margin-left: 20px;
+
+
+}
+
+
+#promptBanner {
+	border :2px #351CD0 solid;
+	padding: 20px;
+	text-align: center;
+	font-size: 60px;
 }

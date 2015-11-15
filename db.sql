@@ -12,14 +12,15 @@ INSERT INTO "students" VALUES('U201417137','Stephen Pile
 INSERT INTO "students" VALUES('U201417136','Abraham Lincoln','asdf',1,'null');
 CREATE TABLE bulletins(
 bulletID integer primary key autoincrement not null,
+bulletTitle text not null,
 bulletMsg text not null,
 bulletTime text not null,
 userID text not null,
 foreign key(userID) references students(userID));
-INSERT INTO "bulletins" VALUES(12,'Never Go Die !','11.12','U201417138');
-INSERT INTO "bulletins" VALUES(19,'Life may have no meaning, or, even worse, it may have a meaning of which
+INSERT INTO "bulletins" VALUES(12,'这是标题','Never Go Die !','11.12','U201417138');
+INSERT INTO "bulletins" VALUES(19,'这也是title','Life may have no meaning, or, even worse, it may have a meaning of which
 you disapprove.','11.13','U201417137');
-INSERT INTO "bulletins" VALUES(20,'I don''t know who my grandfather was; I am much more concerned to know
+INSERT INTO "bulletins" VALUES(20,'另一个title','I don''t know who my grandfather was; I am much more concerned to know
 what his grandson will be.','11.13','U201417136');
 CREATE TABLE comments(
 commentID integer primary key autoincrement not null,

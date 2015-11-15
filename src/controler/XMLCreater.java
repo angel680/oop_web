@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import model.Bulletin;
 import model.Comment;
+import model.Student;
 import dbaccess.DataAccess;
 
 public class XMLCreater {
 	public static String getAllBulletins(String path){
 		DataAccess da = new DataAccess(path);
-		
 		StringBuilder xmldoc = new StringBuilder();
 		xmldoc.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
 		xmldoc.append("<AllBulletins>");
@@ -21,6 +21,7 @@ public class XMLCreater {
 			xmldoc.append("<bullet>");
 			
 			xmldoc.append("<bulletID>" + String.valueOf(bullet.getBulletID())+"</bulletID>");
+			xmldoc.append("<bulletTitle>" + bullet.getBulletTitle() +"</bulletTitle>");
 			xmldoc.append("<bulletMsg>" + bullet.getBulletMsg() +"</bulletMsg>");
 			xmldoc.append("<bulletTime>" + bullet.getBulletTime() +"</bulletTime>");
 			xmldoc.append("<userName>" + username + "</userName>");
@@ -50,6 +51,32 @@ public class XMLCreater {
 		
 		return xml;
 	}; 
+	
+	
+	public static String getStudentInfo(String userID, String dbpath){
+		DataAccess da = new DataAccess(dbpath);
+		StringBuilder xmldoc = new StringBuilder();
+		Student stu = da.findStudent(userID);
+		da.terminate();
+		xmldoc.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		xmldoc.append("<info>");
+		if (stu != null) {
+			xmldoc.append("<Student>");
+			xmldoc.append("<userID>" + stu.getUserID() + "</userID>");
+			xmldoc.append("<userName>" + stu.getUserName() + "</userName>");
+			xmldoc.append("<userPasswd>" + stu.getUserPasswd() + "</userPasswd>");
+			xmldoc.append("<userEmail>" + stu.getUserEmail() + "</userEmail>");
+			xmldoc.append("<userAuth>" + String.valueOf(stu.getUserAuth()) + "</userAuth>");
+			xmldoc.append("</Student>");
+		}else {
+			xmldoc.append("<Student>");
+			xmldoc.append("</Student>");
+		}
+		xmldoc.append("</info>");
+		
+		
+		return xmldoc.toString();
+	}
 	
 	
 }

@@ -53,13 +53,36 @@ public class BulletinsHub extends HttpServlet {
 				System.out.println("\t"+bulletID);
 				System.out.println("\t"+bulletMsg);
 				System.out.println("\t"+userID);
-				return;
 			}else {
 				BulletinsManager bm = new BulletinsManager(path);
 				if(bm.updateBulletin(Integer.valueOf(bulletID),bulletTitle, bulletMsg, userID)){
 					response.setContentType("text/plain;charset=utf-8");
 					PrintWriter out = response.getWriter();
 					out.println("updated");
+			        out.flush();
+				}else{
+					PrintWriter out = response.getWriter();
+					out.println("failed");
+			        out.flush();
+				}
+			}
+		}if(reqtype.equals("addComment")){
+			/**/
+			String bulletID =request.getParameter("bulletID");
+			String userID = request.getParameter("userID");
+			String commentMsg = request.getParameter("commentMsg");
+			if(bulletID == null || userID == null || commentMsg == null){
+				System.out.println("Parameter not get:");
+				System.out.println("\t" + bulletID);
+				System.out.println("\t" + userID);
+				System.out.println("\t" + commentMsg);
+			}else {
+				/*add comment*/
+				BulletinsManager bm = new BulletinsManager(path);
+				if(bm.addcommentToBulletin(commentMsg, userID, Integer.valueOf(bulletID))){
+					response.setContentType("text/plain;charset=utf-8");
+					PrintWriter out = response.getWriter();
+					out.println("added");
 			        out.flush();
 				}else{
 					PrintWriter out = response.getWriter();

@@ -131,11 +131,13 @@ body {
 }
 
 .bulletinCommentName {
+	color: green;
 	float: left;
 
 }
 .bulletinCommentCon {
 	float: left;
+	margin-left: 16px;
 }
 .bulletinCommentTime {
 	clear: both;

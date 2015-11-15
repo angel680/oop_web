@@ -356,7 +356,8 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 			return true;
 		} catch (SQLException e) {
 			System.out.println("LEO LOG: addComment SQL EXECUTE FAIL: \n"
-					+ "\t" + e.getSQLState());	
+					+ "\t" + e.getMessage());
+			System.out.println(sql);
 			return false;
 		}
 	}

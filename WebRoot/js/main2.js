@@ -4,6 +4,7 @@
 var userName = document.getElementById("btnLogin");
 var localeUserID = "";
 var localeUserName = "";
+var bulletinID = new Array();
 
 function getUserInfo(){
 	
@@ -29,7 +30,6 @@ window.onload = function showBulletins(){
 			xmldoc = reqxml.responseXML;
 			bulletins = xmldoc.getElementsByTagName("bullet")
 			
-			var bulletinID = new Array();
 			var bulletinTitle = new Array();
 			var bulletinMsg = new Array();
 			var bulletinTime = new Array();
@@ -78,22 +78,20 @@ window.onload = function showBulletins(){
 							"<div class ='bulletinBtn'>"+
 							"<input class='bulletinLike' type='button'>"+
 							"<input class='bulletinCommentBtn' id = bulletinCommentBtn"+ i 
-							+ " type='button' value='评论'></div>+"
+							+ " type='button' value='评论'></div>"
 							+"<div class='bulletinComment' id = bulletinComment"+i+ " >");
 				
 				
 				for(j=0;j<commentsID[i].length;j++){
-				txtcontent+=(   "<p class='bulletinCommentName'>"+ cuserName[i][j] +"</p>"+
+				txtcontent+=(   "<p class='bulletinCommentName'>"+ cuserName[i][j] +":</p>"+
 					            "<p class='bulletinCommentCon'>" +commentsMsg[i][j]+ " </p>"+
 					            "<p class='bulletinCommentTime'>"+commentsTime[i][j] + "</p>"
 					          
 					          );
-				}
-				
-					       
+				}    
 					
 				txtcontent += ("<input type='text' class='bulletinCommentInput'>" +
-						"<input type='button' class='bulletinCommentInputBtn' value='发表评论'>"+
+						"<input type='button' class='bulletinCommentInputBtn' id=bulletinCommentInputBtn" + i + " value='发表评论'>"+
 					        "</div></div>");
 				if(i==bulletinlength-1){
 					txtcontent +="<div id='promptBanner'>没有更多公告了！	</div>";
@@ -109,9 +107,17 @@ window.onload = function showBulletins(){
 				      $("#bulletinComment"+i).slideToggle("slow");
 				    });
 				})(i);
+				
+							
+				
 				//这里出了问题
 				////////////////////////////////////////////////////////
 			}	
+			
+			var bulletinCommentInputBtns = document.getElementsByClassName("bulletinCommentInputBtn");
+			for (var k = 0; k < bulletinCommentInputBtns.length; k++) {
+			    bulletinCommentInputBtns[k].onclick = funcComment;
+			};
 			
 			
 		}
@@ -142,9 +148,55 @@ window.onload = function showBulletins(){
 	}
 	reqxml2.open("GET","Login?reqtype=getUserInfoBySession", true);
 	reqxml2.send();
-	
-	
+		
 }
+
+
+var funcComment = function() {
+	
+	var xmlhttp;
+	if(window.XMLHttpRequest){
+		xmlhttp = new XMLHttpRequest();
+	}else{
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+    ///获取上一个兄弟节点，得到内容
+    var texts = $(this).prev().val();
+    $(this).prev().attr("value","");
+    
+    if(texts == ""){
+    	return;
+    }
+   
+    var now = (new Date()).toLocaleString();
+    var who = localeUserID;
+    var getI = this.id;
+    var index = getI.charAt(getI.length-1);
+        // 得到 时间
+        //得到是谁
+        //将内容此格式显示出来 在 评论框前面
+    $(this).prev().before("<p class='bulletinCommentName'>" + who +"</p>" +
+        "<p class='bulletinCommentCon'>" + texts + "</p>" +
+        " <p class='bulletinCommentTime'>刚刚</p>");
+    
+    xmlhttp.onreadystatechange= function(){
+		if(xmlhttp.readyState==4 && xmlhttp.status==200){
+			if(xmlhttp.responseText == "failed"){
+				alert("评论失败");
+			}
+			
+		}
+
+	}
+    //向服务器发请求
+    xmlhttp.open("GET", "BulletinsHub?reqtype=addComment&bulletID=" + bulletinID[index] + "&userID="+ who+ "&commentMsg=" + texts , true);
+    xmlhttp.send();
+}
+
+//事件绑定 会有bug
+
+
 
 
 

@@ -66,8 +66,8 @@ window.onload = function showBulletins(){
 				var sdiv=document.createElement("div");  
 				sdiv.className="bulletin";  
 				
-				txtcontent = ("<div class='bulletin'>"+
-						"<img class='headpic' src='headpic.png'>"+
+				txtcontent = (//"<div class='bulletin'>"+
+						"<img class='headpic' src='img/headpic.jpg'>"+
 						   "<p class='bulletinTime'>"+ bulletinTime[i] +"</p>"+
 							"<div class='bulletinMain'>"+
 							 "<div class='bulletinMainSon'>"+
@@ -78,7 +78,7 @@ window.onload = function showBulletins(){
 							"<div class ='bulletinBtn'>"+
 							"<input class='bulletinLike' type='button' value = "+bulletinFavors[i] + " id = bulletinLike"+i+" >"+
 							"<input class='bulletinCommentBtn' id = bulletinCommentBtn"+ i 
-							+ " type='button' value='评论'></div>"
+							+ " type='button' ></div>"
 							+"<div class='bulletinComment' id = bulletinComment"+i+ " >");
 				
 				
@@ -92,10 +92,10 @@ window.onload = function showBulletins(){
 					
 				txtcontent += ("<input type='text' class='bulletinCommentInput'>" +
 						"<input type='button' class='bulletinCommentInputBtn' id=bulletinCommentInputBtn" + i + " value='发表评论'>"+
-					        "</div></div>");
-				if(i==bulletinlength-1){
+					        "</div>");
+				/*if(i==bulletinlength-1){
 					txtcontent +="<div id='promptBanner'>没有更多公告了！	</div>";
-				}
+				}*/
 				
 				sdiv.innerHTML = txtcontent;
 				container.appendChild(sdiv);

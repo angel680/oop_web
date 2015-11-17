@@ -1,0 +1,42 @@
+#changeContainer {
+	margin-left: 245px;
+	padding-top: 60px;
+	
+}
+
+
+.bulletins {
+	width: 80%;
+	margin: 50px auto; 
+	height: 68px;
+	background-color: rgba(63,42,156,0.5);
+}
+
+
+.bulletinsName {
+	float: left;
+	width: 60%;
+	line-height: 68px;
+	font-size: 26px;
+	color: red;
+}
+
+
+.btnDelete {
+	float: right;
+	margin: 14px 5% 14px 0;
+	height: 40px;
+	width: 10%;
+	font-size: 20px;
+}
+
+
+.btnAmend {
+	display: block;
+	float: right;
+	margin: 14px 5% 14px 0;
+	height: 40px;
+	font-size: 20px;
+	width: 10%;
+
+}

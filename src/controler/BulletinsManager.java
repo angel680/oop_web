@@ -15,6 +15,16 @@ public class BulletinsManager {
 		this.dbpath = dbpath;
 	}
 	
+	public boolean addBulletin(String bulletTitle,  String bulletMsg,String userID){
+		DataAccess da = new DataAccess(dbpath);
+		String bulletTime = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG,
+				Locale.CHINESE).format(new java.util.Date());
+		
+		Bulletin toadd = new Bulletin(0, bulletTitle, bulletMsg, bulletTime, userID);
+		boolean succeed =  da.addBulletin(toadd);
+		return succeed;
+		
+	}
 	
 	public boolean updateBulletin(int bulletID,String bulletTitle, String bulletMsg,String userID){
 		

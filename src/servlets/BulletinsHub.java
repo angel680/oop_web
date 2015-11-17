@@ -2,17 +2,21 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.Buffer;
-import java.text.DateFormat;
-import java.util.Locale;
+
+
+
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import model.Student;
 import controler.BulletinsManager;
+import controler.StudentManager;
 import controler.XMLCreater;
 
 /**
@@ -32,6 +36,7 @@ public class BulletinsHub extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String reqtype = request.getParameter("reqtype");
 		String path = this.getServletConfig().getServletContext().getRealPath("/")+"db/datas.db";
+		
 		if (reqtype.equals("getAll")) {
 			String xml = XMLCreater.getAllBulletins(path);
 			response.setCharacterEncoding("utf-8");
@@ -42,9 +47,33 @@ public class BulletinsHub extends HttpServlet {
 	        out.flush();
 		}
 		//if(reqtype.)
+		if(reqtype.equals("addbulletin")){
+			HttpSession session = request.getSession();
+			String userID = (String) session.getAttribute(request.getRemoteAddr());
+			if (userID == null) {
+				response.sendRedirect("login.html");
+			}else {
+				StudentManager stumgr = new StudentManager(path);
+				Student operator =  stumgr.getStudent(userID);
+				if (operator.getUserAuth() == 0) {
+					response.sendRedirect("login.html");
+				}else if (operator.getUserAuth() == 1) {
+					String bulletTitle = request.getParameter("bulletTitle");
+					String bulletMsg = request.getParameter("bulletMsg");
+					
+					BulletinsManager bm = new BulletinsManager(path);
+					if(bm.addBulletin(bulletTitle, bulletMsg, userID)){
+						response.sendRedirect("adminMain.html");
+					}
+					
+				}
+			}
+		}
 		
 		
 		
+		
+		//update bulletin
 		if(reqtype.equals("update")){
 			
 			String bulletID =request.getParameter("bulletID");
@@ -70,7 +99,9 @@ public class BulletinsHub extends HttpServlet {
 			        out.flush();
 				}
 			}
-		}if(reqtype.equals("addComment")){
+		}
+		//add comment
+		if(reqtype.equals("addComment")){
 			/**/
 			String bulletID =request.getParameter("bulletID");
 			String userID = request.getParameter("userID");
@@ -95,6 +126,7 @@ public class BulletinsHub extends HttpServlet {
 				}
 			}
 		}
+		//add favor
 		if(reqtype.equals("addFavor")){
 			String bulletID =request.getParameter("bulletID");
 			String userID = request.getParameter("userID");
@@ -119,7 +151,7 @@ public class BulletinsHub extends HttpServlet {
 						PrintWriter out = response.getWriter();
 						out.print("failed");
 				        out.flush();
-				        System.out.println("addfavor: faild");
+				        //System.out.println("addfavor: faild");
 					}
 				}else {
 					if (bm.deleteFavorByTwoID(userID, Integer.valueOf(bulletID))) {

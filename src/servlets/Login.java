@@ -113,9 +113,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 System.out.println(this.getServletConfig().getServletContext().getRealPath("/"));
-		System.out.println("dopost");
-		System.out.println(this.getServletConfig().getServletContext().getRealPath("/"));
+	
 	}
 
 }

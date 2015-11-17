@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import model.Bulletin;
 import model.Comment;
+import model.Favor;
 import dbaccess.DataAccess;
 
 public class BulletinsManager {
@@ -38,5 +39,35 @@ public class BulletinsManager {
 		da.terminate();
 		return succeed;
 	}
+	
+	public boolean addFavorToBulletin(String userID, int bulletID){
+		DataAccess da = new DataAccess(dbpath);
+		String favorTime = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG,
+				Locale.CHINESE).format(new java.util.Date());
+		Favor toadd = new Favor(0, favorTime, userID, bulletID);
+		boolean succeed = da.addFavor(toadd);
+		da.terminate();
+		return succeed;
+	}
+	
+	public int findFavorByBulletinAndUser(String userID, int bulletID) {
+		DataAccess da = new DataAccess(dbpath);
+		Favor find =  da.findFavorByUserAndBulletin(userID, bulletID);
+		da.terminate();
+		if (find == null) {
+			return -1;
+		}else {
+			return find.getFavorID();
+		}
+		
+	}
+	
+	public boolean deleteFavorByTwoID(String userID, int bulletID) {
+		DataAccess da = new DataAccess(dbpath);
+		boolean succeed = da.deleteFavor(userID, bulletID);
+		da.terminate();
+		return succeed;
+	}
+	
 	
 }

@@ -41,6 +41,10 @@ public class BulletinsHub extends HttpServlet {
 	        out.println(xml);
 	        out.flush();
 		}
+		//if(reqtype.)
+		
+		
+		
 		if(reqtype.equals("update")){
 			
 			String bulletID =request.getParameter("bulletID");
@@ -82,13 +86,58 @@ public class BulletinsHub extends HttpServlet {
 				if(bm.addcommentToBulletin(commentMsg, userID, Integer.valueOf(bulletID))){
 					response.setContentType("text/plain;charset=utf-8");
 					PrintWriter out = response.getWriter();
-					out.println("added");
+					out.print("added");
 			        out.flush();
 				}else{
 					PrintWriter out = response.getWriter();
-					out.println("failed");
+					out.print("failed");
 			        out.flush();
 				}
+			}
+		}
+		if(reqtype.equals("addFavor")){
+			String bulletID =request.getParameter("bulletID");
+			String userID = request.getParameter("userID");
+			if(bulletID == null || userID == null){
+				System.out.println("Parameter not get:");
+				System.out.println("\t" + bulletID);
+				System.out.println("\t" + userID);
+
+			}else {
+				/*add favor*/
+				BulletinsManager bm = new BulletinsManager(path);
+				int existFavorID = bm.findFavorByBulletinAndUser(userID, Integer.valueOf(bulletID));
+				
+				if (existFavorID == -1) {
+					if (bm.addFavorToBulletin(userID, Integer.valueOf(bulletID))) {
+						response.setContentType("text/plain;charset=utf-8");
+						PrintWriter out = response.getWriter();
+						out.print("added");
+				        out.flush();	
+				        System.out.println("addfavor: succeed");
+					}else{
+						PrintWriter out = response.getWriter();
+						out.print("failed");
+				        out.flush();
+				        System.out.println("addfavor: faild");
+					}
+				}else {
+					if (bm.deleteFavorByTwoID(userID, Integer.valueOf(bulletID))) {
+						response.setContentType("text/plain;charset=utf-8");
+						PrintWriter out = response.getWriter();
+						out.print("deleted");
+				        out.flush();	
+				        //System.out.println("deletefavor: succeed");
+					}else{
+						PrintWriter out = response.getWriter();
+						out.print("failed");
+				        out.flush();
+				        //System.out.println("addfavor: faild");
+					}
+				}
+				
+				
+				
 			}
 		}
 		

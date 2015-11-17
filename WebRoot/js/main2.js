@@ -76,7 +76,7 @@ window.onload = function showBulletins(){
 							"</div>"+
 							"</div>"+
 							"<div class ='bulletinBtn'>"+
-							"<input class='bulletinLike' type='button'>"+
+							"<input class='bulletinLike' type='button' value = "+bulletinFavors[i] + " id = bulletinLike"+i+" >"+
 							"<input class='bulletinCommentBtn' id = bulletinCommentBtn"+ i 
 							+ " type='button' value='评论'></div>"
 							+"<div class='bulletinComment' id = bulletinComment"+i+ " >");
@@ -118,6 +118,14 @@ window.onload = function showBulletins(){
 			for (var k = 0; k < bulletinCommentInputBtns.length; k++) {
 			    bulletinCommentInputBtns[k].onclick = funcComment;
 			};
+			
+			//绑定 赞
+            var bulletinLikes = document.getElementsByClassName("bulletinLike");
+            for (var i = 0; i < bulletinLikes.length; i++) {
+            	bulletinLikes[i].onclick = funcBulletinLike;
+            };
+			
+			
 			
 			
 		}
@@ -165,6 +173,11 @@ var funcComment = function() {
     var texts = $(this).prev().val();
     $(this).prev().attr("value","");
     
+    if(localeUserName == ""){
+    	window.location.href="login.html";
+    	return;
+    }
+    
     if(texts == ""){
     	return;
     }
@@ -176,7 +189,7 @@ var funcComment = function() {
         // 得到 时间
         //得到是谁
         //将内容此格式显示出来 在 评论框前面
-    $(this).prev().before("<p class='bulletinCommentName'>" + who +"</p>" +
+    $(this).prev().before("<p class='bulletinCommentName'>" + localeUserName +": </p>" +
         "<p class='bulletinCommentCon'>" + texts + "</p>" +
         " <p class='bulletinCommentTime'>刚刚</p>");
     
@@ -196,7 +209,64 @@ var funcComment = function() {
 
 //事件绑定 会有bug
 
+var funcBulletinLike = function() {
 
+
+    //得到是那条公告
+    var who = localeUserID;
+    var getI = this.id;
+    var index = getI.charAt(getI.length - 1);
+    //得到是谁*********************bulletinID[index]*********!!!!!!!
+
+    //判断是否赞过 *****************如何从服务器上获取
+   /*
+    if (likes[index] == 1) {
+        alert("对不起，您已经赞过一次了");
+        likes[index] = 1;
+        return;
+
+    }*/
+    if(who == ""){
+    	window.location.href="login.html";
+    	return;
+    }
+    
+    var favorbutton = this;
+    //声明交换数据的对象
+    var whoLike;
+    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        whoLike = new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        whoLike = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    //异步的回调函数，写在open send 前面
+    whoLike.onreadystatechange = function() {
+            if (whoLike.readyState == 4 && whoLike.status == 200) {
+                //字符串格式
+                if (whoLike.responseText == "failed") {
+                    alert("something happened")
+                }
+                if(whoLike.responseText == "added"){
+                	var bulletinLikes = document.getElementsByClassName("bulletinLike");
+                	var favornum =  bulletinLikes[index].value;
+                	favornum = parseInt(favornum) + 1;
+                	bulletinLikes[index].value = favornum;
+                }
+                if (whoLike.responseText == "deleted") {
+                	var bulletinLikes = document.getElementsByClassName("bulletinLike");
+                	var favornum =  bulletinLikes[index].value;
+                	favornum = parseInt(favornum) - 1;
+                	bulletinLikes[index].value = favornum;
+				}
+
+
+            }
+        }
+        // 向服务器发送请求
+    whoLike.open("GET", "BulletinsHub?reqtype=addFavor&bulletID="+ bulletinID[index] + "&userID="+ who, true);
+    whoLike.send();
+
+}
 
 
 

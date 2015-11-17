@@ -241,6 +241,29 @@ public class DataAccess {
 		return returnArray;
 	}
 	
+	public Favor findFavorByUserAndBulletin(String userID, int bulletID){
+		Favor m_favor = null;
+		
+		String sql = "SELECT favorID, favorTime, "
+				+ "bulletID FROM favors "
+				+ "WHERE userID = '" + userID + "' "
+				+ "AND bulletID = " + String.valueOf(bulletID);
+		
+		try {
+			ResultSet result = m_statement.executeQuery(sql);
+			if (result.next()) {
+				int favorID = result.getInt(1);
+				String favorTime = result.getString(2);
+				m_favor = new Favor(favorID, favorTime, userID, bulletID);
+			}	
+		} catch (SQLException e) {
+			System.out.println("LEO LOG: findFavorByUserAndBulletin SQL EXECUTE FAIL\n\t" + e.getMessage());			e.printStackTrace();
+		}		
+		return m_favor;
+	}
+	
+	
+	
 	
 
 public ArrayList<Comment> findCommentByBulletin(int bulletID){

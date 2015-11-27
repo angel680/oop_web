@@ -573,7 +573,7 @@ public ArrayList<Comment> findCommentByBulletin(int bulletID){
 		Bulletin m_Bulletin;
 		
 		String sql = "SELECT bulletID, bulletTitle, bulletMsg, "
-				+ "bulletTime, userID FROM bulletins ";
+				+ "bulletTime, userID FROM bulletins ORDER BY bulletTime DESC";
 		try {
 			ResultSet result = m_statement.executeQuery(sql);
 			while(result.next()){

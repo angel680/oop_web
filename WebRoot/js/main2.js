@@ -102,11 +102,16 @@ window.onload = function showBulletins(){
 				
 				
 				////////////////////////////////////////////////////////
-				(function(i){
-				    $("#bulletinCommentBtn"+i).click(function(){
-				      $("#bulletinComment"+i).slideToggle("slow");
-				    });
-				})(i);
+				try {
+					(function(i){
+					    $("#bulletinCommentBtn"+i).click(function(){
+					      $("#bulletinComment"+i).slideToggle("slow");
+					    });
+					})(i);
+				} catch (e) {
+					// TODO: handle exception
+				}
+				
 				
 							
 				
@@ -148,7 +153,12 @@ window.onload = function showBulletins(){
 			if(student[0].childElementCount != 0){
 				localeUserID = student[0].children[0].childNodes[0].nodeValue;
 				localeUserName = student[0].children[1].childNodes[0].nodeValue;
-				document.getElementById("userName").innerHTML = "欢迎您，" + localeUserName;
+				try {
+					document.getElementById("userName").innerHTML = "欢迎您，" + localeUserName;
+				} catch (e) {
+					// TODO: handle exception
+				}
+				
 			}
 			
 		}

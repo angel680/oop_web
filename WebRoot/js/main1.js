@@ -76,7 +76,7 @@ var funcSend = function() {
 				if (xmlhttp.responseText == "true")
 				{
 					alert ("恭喜您注册成功");
-					Cancel.call();
+					btnCancel.click();
 					
 				} 
 				else

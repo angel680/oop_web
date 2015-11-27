@@ -50,12 +50,13 @@ public class StuRegister extends HttpServlet {
 			Student toadd = new Student(userID, userName, userPasswd, 0, userEmail);
 			StudentManager stumgr = new StudentManager(root + "db/datas.db");
 			boolean issucceed =  stumgr.studentRegister(toadd);
-					
+			
+			/*
 			System.out.println(userID);
 			System.out.println(userName);
 			System.out.println(userPasswd);
 			System.out.println(userEmail);
-			
+			*/
 			response.setContentType("text/plain");
 			PrintWriter out = response.getWriter();
 			out.print(String.valueOf(issucceed));

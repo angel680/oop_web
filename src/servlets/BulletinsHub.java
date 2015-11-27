@@ -46,7 +46,42 @@ public class BulletinsHub extends HttpServlet {
 	        out.println(xml);
 	        out.flush();
 		}
-		//if(reqtype.)
+		
+		if (reqtype.equals("modify")) {
+			int bulletID = Integer.valueOf(request.getParameter("bulletID"));
+			String oper = request.getParameter("operbutton");
+			oper=new String(oper.getBytes("ISO-8859-1"),"utf-8");
+			
+			
+			
+			
+			HttpSession session = request.getSession();
+			String userID = (String) session.getAttribute(request.getRemoteAddr());
+			if (userID == null) {
+				response.sendRedirect("login.html");
+			}else {
+				if (oper.equals("É¾³ý")) {
+					StudentManager stumgr = new StudentManager(path);
+					Student operator =  stumgr.getStudent(userID);
+					if (operator.getUserAuth() == 0) {
+						response.sendRedirect("login.html");
+					}else if (operator.getUserAuth() == 1) {
+						BulletinsManager bm = new BulletinsManager(path);
+						if(bm.deleteBulletin(bulletID)){
+							response.sendRedirect("adminChange.html");
+						}
+						
+					}
+				}else if (oper.equals("ÐÞ¸Ä")) {
+					response.sendRedirect("updateBulletin?bulletID="+bulletID);
+				}
+				
+				
+				
+				
+			}
+		}
+		
 		if(reqtype.equals("addbulletin")){
 			HttpSession session = request.getSession();
 			String userID = (String) session.getAttribute(request.getRemoteAddr());
@@ -59,8 +94,10 @@ public class BulletinsHub extends HttpServlet {
 					response.sendRedirect("login.html");
 				}else if (operator.getUserAuth() == 1) {
 					String bulletTitle = request.getParameter("bulletTitle");
-					String bulletMsg = request.getParameter("bulletMsg");
-					
+					bulletTitle=new String(bulletTitle.getBytes("ISO-8859-1"),"utf-8");//brain fuck ios-5559 to utf-8
+					//System.out.println(bulletTitle);
+					String bulletMsg = request.getParameter("bulletMsg"); 
+					bulletMsg=new String(bulletMsg.getBytes("ISO-8859-1"),"utf-8");//brain fuck ios-5559 to utf-8
 					BulletinsManager bm = new BulletinsManager(path);
 					if(bm.addBulletin(bulletTitle, bulletMsg, userID)){
 						response.sendRedirect("adminMain.html");
@@ -70,33 +107,30 @@ public class BulletinsHub extends HttpServlet {
 			}
 		}
 		
-		
-		
-		
 		//update bulletin
 		if(reqtype.equals("update")){
 			
-			String bulletID =request.getParameter("bulletID");
-			String bulletTitle = request.getParameter("bulletTitle");
-			String bulletMsg = request.getParameter("bulletMsg");
-			String userID = request.getParameter("userID");
-			
-			if (bulletID == null || bulletMsg == null || userID == null) {
-				System.out.println("Parameter not get:");
-				System.out.println("\t"+bulletID);
-				System.out.println("\t"+bulletMsg);
-				System.out.println("\t"+userID);
+			HttpSession session = request.getSession();
+			String userID = (String) session.getAttribute(request.getRemoteAddr());
+			if (userID == null) {
+				response.sendRedirect("login.html");
 			}else {
-				BulletinsManager bm = new BulletinsManager(path);
-				if(bm.updateBulletin(Integer.valueOf(bulletID),bulletTitle, bulletMsg, userID)){
-					response.setContentType("text/plain;charset=utf-8");
-					PrintWriter out = response.getWriter();
-					out.println("updated");
-			        out.flush();
-				}else{
-					PrintWriter out = response.getWriter();
-					out.println("failed");
-			        out.flush();
+				StudentManager stumgr = new StudentManager(path);
+				Student operator =  stumgr.getStudent(userID);
+				if (operator.getUserAuth() == 0) {
+					response.sendRedirect("login.html");
+				}else if (operator.getUserAuth() == 1) {
+					int bulletID = Integer.valueOf(request.getParameter("bulletID"));
+					String bulletTitle = request.getParameter("bulletTitle");
+					bulletTitle=new String(bulletTitle.getBytes("ISO-8859-1"),"utf-8");//brain fuck ios-5559 to utf-8
+					//System.out.println(bulletTitle);
+					String bulletMsg = request.getParameter("bulletMsg"); 
+					bulletMsg=new String(bulletMsg.getBytes("ISO-8859-1"),"utf-8");//brain fuck ios-5559 to utf-8
+					BulletinsManager bm = new BulletinsManager(path);
+					if(bm.updateBulletin(bulletID, bulletTitle, bulletMsg, userID)){
+						response.sendRedirect("adminMain.html");
+					}
+					
 				}
 			}
 		}

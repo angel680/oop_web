@@ -87,12 +87,20 @@ public class Login extends HttpServlet {
 			 if(stmgr.checkLogin(userID, userPasswd)){
 			     HttpSession session = request.getSession();
 			     session.setAttribute(request.getRemoteAddr(), userID);
-			     response.sendRedirect("./userMain.html");
+			     int auth = stmgr.getStudent(userID).getUserAuth();
+			     if (auth == 1) {
+			    	 response.sendRedirect("./adminMain.html");
+			     }else if(auth == 0){
+			    	 response.sendRedirect("./userMain.html");
+				}
+			     
 			 }else {
-				 response.setContentType("text/plain");
-				 PrintWriter out = response.getWriter();
-				 out.print("false");
-				 out.flush();
+				 response.setContentType("text/html;charset = utf-8"); 
+				 response.setCharacterEncoding("UTF-8");
+				 PrintWriter output = response.getWriter();
+				 output.print("<h1>ÃÜÂë´íÎó</h1>");
+				 output.print("<a href='login.html'>·µ»Ø</a>");
+				 output.flush();
 			 }
 		 }	 
 		 

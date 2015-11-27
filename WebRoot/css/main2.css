@@ -115,6 +115,9 @@ body {
     background-size: 80px 58px;
     background-color: transparent;
     border: 2px transparent solid;
+    font-size: 26px;
+    font-weight: 600;
+    color: white;
 }
 
 .bulletinCommentBtn {

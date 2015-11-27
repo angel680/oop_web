@@ -15,6 +15,21 @@ public class BulletinsManager {
 		this.dbpath = dbpath;
 	}
 	
+	public boolean deleteBulletin(int bulletID){
+		DataAccess da = new DataAccess(dbpath);
+		boolean issucceed = da.deleteBulletin(bulletID);
+		da.terminate();
+		return issucceed;
+	}
+	
+	public Bulletin getBulletin(int bulletID){
+		DataAccess da = new DataAccess(dbpath);
+		Bulletin bt = da.findBulletin(bulletID);
+		da.terminate();
+		return bt;
+	}
+	
+	
 	public boolean addBulletin(String bulletTitle,  String bulletMsg,String userID){
 		DataAccess da = new DataAccess(dbpath);
 		String bulletTime = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG,
